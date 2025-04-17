@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: staff-service-deployment
+  labels:
+    app: staff-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: staff-service
+  template:
+    metadata:
+      labels:
+        app: staff-service
+      spec:
+      containers:
+        - name: staff-service
+          image: maryamcst8915/bestbuy-staff-service:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PORT
+              value: "3000"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: staff-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: staff-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
